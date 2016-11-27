@@ -26,14 +26,15 @@ public class DropPatch extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
+
         Player player = event.getPlayer();
-        if (event.getPlayer().isOnline()) return;
+        if (player.isOnline()) return;
 
         event.setCancelled(true);
 
         if (!notify) return;
 
         String replacedMsg = notifyMsg.replace("$player", player.getName());
-        getServer().getOnlinePlayers().stream().filter(player1 -> !player1.hasPermission("DropPatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
+        getServer().getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("DropPatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
     }
 }
