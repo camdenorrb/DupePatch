@@ -1,4 +1,4 @@
-package me.camdenorrb.droppatch.utils;
+package me.camdenorrb.dupepatch.utils;
 
 import org.bukkit.ChatColor;
 

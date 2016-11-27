@@ -1,4 +1,4 @@
-name: DropPatch
-version: Kat1.1
+name: DupePatch
+version: Kat1.2
 author: MrKitty_Cat
-main: me.camdenorrb.droppatch.DropPatch
+main: me.camdenorrb.dupepatch.DupePatch
