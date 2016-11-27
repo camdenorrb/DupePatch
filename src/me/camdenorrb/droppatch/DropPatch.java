@@ -21,7 +21,7 @@ public class DropPatch extends JavaPlugin implements Listener {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
         notify = getConfig().getBoolean("SendNotification", true);
-        notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch!"));
+        notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch! They tried to duplicate $item."));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -33,7 +33,7 @@ public class DropPatch extends JavaPlugin implements Listener {
 
         if (!notify) return;
 
-        String replacedMsg = notifyMsg.replace("$player", player.getName());
-        getServer().getOnlinePlayers().stream().filter(player1 -> !player1.hasPermission("DropPatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
+		final String replacedMsg = notifyMsg.replace("$player", player.getName()).replace("$item", event.getItemDrop().getType().toString().toLowerCase());
+		Bukkit.getServer().getOnlinePlayers().stream().filter(player1 -> !player1.hasPermission("DropPatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
     }
 }
