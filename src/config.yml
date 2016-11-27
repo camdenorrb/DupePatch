@@ -6,5 +6,5 @@
 # Sends a notification ($player is replaced with the Player name) to players with the permission: DropPatch.Notify (Case-Sensitive).
 NotifyMsg: "&c&l$player, has been caught trying to Drop Glitch!"
 
-# Enable or Disable the sending of the NotifyMsg. This can have false positives at times.
+# Enable or Disable the sending of the NotifyMsg. This can have false positives at times, and is only called on successful attempts (Which is not often).
 SendNotification: true
