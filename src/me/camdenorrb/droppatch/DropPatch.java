@@ -16,6 +16,7 @@ public class DropPatch extends JavaPlugin implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onDrop(PlayerDropItemEvent event) { if (!event.getPlayer().isOnline()) event.setCancelled(true); }
-
+    public void onDrop(PlayerDropItemEvent event) {
+        if (!event.getPlayer().isOnline()) event.setCancelled(true);
+    }
 }
