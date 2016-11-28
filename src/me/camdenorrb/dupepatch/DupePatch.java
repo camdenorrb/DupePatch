@@ -1,7 +1,6 @@
 package me.camdenorrb.dupepatch;
 
 import me.camdenorrb.dupepatch.utils.ChatUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,11 +23,6 @@ public class DupePatch extends JavaPlugin implements Listener {
         notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch!"));
     }
 
-    @EventHandler
-    public void onDrop1(PlayerDropItemEvent event) {
-        Bukkit.broadcastMessage("Meow");
-    }
-
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event) {
 
@@ -39,6 +33,7 @@ public class DupePatch extends JavaPlugin implements Listener {
 
         if (!notify) return;
 
+        //TODO: Add console logging.
         String replacedMsg = notifyMsg.replace("$player", player.getName());
         getServer().getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("DupePatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
     }
