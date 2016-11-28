@@ -15,13 +15,40 @@ public class DupePatch extends JavaPlugin implements Listener {
 
     private boolean notify;
     private String notifyMsg;
+    private DupePatch instance;
 
     @Override
     public void onEnable() {
+        instance = this;
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
         notify = getConfig().getBoolean("SendNotification", true);
         notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch!"));
+    }
+
+    @Override
+    public void onDisable() {
+        instance = null;
+    }
+
+    public boolean isNotify() {
+        return notify;
+    }
+
+    public String notifyMsg() {
+        return notifyMsg;
+    }
+
+    public DupePatch instance() {
+        return instance;
+    }
+
+    public void setNotify(boolean notify) {
+        this.notify = notify;
+    }
+
+    public void setNotifyMsg(String notifyMsg) {
+        this.notifyMsg = notifyMsg;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
