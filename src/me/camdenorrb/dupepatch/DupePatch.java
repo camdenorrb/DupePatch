@@ -3,6 +3,7 @@ package me.camdenorrb.dupepatch;
 import me.camdenorrb.dupepatch.utils.ChatUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,7 +24,7 @@ public class DupePatch extends JavaPlugin implements Listener {
         notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch!"));
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
 
         Player player = event.getPlayer();
