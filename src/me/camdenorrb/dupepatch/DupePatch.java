@@ -35,6 +35,7 @@ public class DupePatch extends JavaPlugin implements Listener {
 
         //TODO: Add console logging.
         String replacedMsg = notifyMsg.replace("$player", player.getName());
+        getServer().getConsoleSender().sendMessage(replacedMsg);
         getServer().getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("DupePatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
     }
 }
