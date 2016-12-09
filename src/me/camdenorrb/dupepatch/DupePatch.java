@@ -1,6 +1,8 @@
 package me.camdenorrb.dupepatch;
 
-import me.camdenorrb.dupepatch.utils.ChatUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -8,61 +10,106 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * Created by camdenorrb on 11/27/16.
- */
+import java.util.stream.Stream;
+
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.of;
+import static org.bukkit.Bukkit.getOnlinePlayers;
+
 public class DupePatch extends JavaPlugin implements Listener {
 
-    private boolean notify;
+    private static final String BASE_PATH = "Notification.";
+    private static DupePatch instance;
+
+
+    private boolean notifyEnabled;
+
+    private String notifyPrefix;
     private String notifyMsg;
-    private DupePatch instance;
+    private String notifyPerm;
+
 
     @Override
     public void onEnable() {
         instance = this;
+
         saveDefaultConfig();
+        loadConfig();
+
         getServer().getPluginManager().registerEvents(this, this);
-        notify = getConfig().getBoolean("SendNotification", true);
-        notifyMsg = ChatUtils.format(getConfig().getString("NotifyMsg", "&c&l$player, has been caught trying to Drop Glitch!"));
     }
 
     @Override
     public void onDisable() {
         instance = null;
+        notifyPrefix = null;
+        notifyMsg = null;
+        notifyPerm = null;
     }
 
-    public boolean isNotify() {
-        return notify;
+
+    private void loadConfig() {
+        setNotifyEnabled(getConfig().getBoolean(BASE_PATH + "Enabled", true));
+        setNotifyPrefix(getConfig().getString("Prefix", "&a&Dupe&e&lPatch &7| "));
+        setNotifyMsg(getConfig().getString(BASE_PATH + "Message", "&c&l%player_name%, was caught trying to Drop Glitch!"));
+
+        notifyPerm = getConfig().getString(BASE_PATH + "Permission", "dupePatch.notify");
     }
 
-    public String notifyMsg() {
+
+    public boolean isNotifyEnabled() {
+        return notifyEnabled;
+    }
+
+    public void setNotifyEnabled(boolean notifyEnabled) {
+        this.notifyEnabled = notifyEnabled;
+    }
+
+    public String getNotifyPrefix() {
+        return notifyPrefix;
+    }
+
+    public void setNotifyPrefix(String notifyPrefix) {
+        this.notifyPrefix = format(notifyPrefix);
+    }
+
+    public String getNotifyMsg() {
         return notifyMsg;
     }
 
-    public DupePatch instance() {
-        return instance;
-    }
-
-    public void setNotify(boolean notify) {
-        this.notify = notify;
-    }
-
     public void setNotifyMsg(String notifyMsg) {
-        this.notifyMsg = notifyMsg;
+        this.notifyMsg = format(notifyMsg);
     }
+
+    public String getNotifyPerm() {
+        return notifyPerm;
+    }
+
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
-
         Player player = event.getPlayer();
-        if (player.isOnline()) return;
 
+        if (player.isOnline()) return;
         event.setCancelled(true);
 
-        if (!notify) return;
-
-        String replacedMsg = notifyMsg.replace("$player", player.getName());
-        getServer().getConsoleSender().sendMessage(replacedMsg);
-        getServer().getOnlinePlayers().stream().filter(player1 -> player1.hasPermission("DupePatch.Notify")).forEach(player1 -> player1.sendMessage(replacedMsg));
+        if (isNotifyEnabled()) {
+            String notification = getNotifyPrefix().concat(getNotifyMsg().replace("%player_name%", player.getName()));
+            receivers().forEach(it -> it.sendMessage(notification));
+        }
     }
+
+
+    public static DupePatch getInstance() {
+        return instance;
+    }
+
+    private static String format(String input) {
+        return ChatColor.translateAlternateColorCodes('&', input);
+    }
+
+    private static Stream<? extends CommandSender> receivers() {
+        return concat(getOnlinePlayers().stream().filter(player -> player.hasPermission(getInstance().getNotifyPerm())), of(Bukkit.getConsoleSender()));
+    }
+
 }

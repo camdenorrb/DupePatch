@@ -3,8 +3,11 @@
 #     Made by: MrKitty_Cat    #
 ###############################
 
-# Sends a notification ($player is replaced with the Player name) to players with the permission: DupePatch.Notify (Case-Sensitive).
-NotifyMsg: "&c&l$player, has been caught trying to Drop Glitch!"
+Prefix: "&a&Dupe&e&lPatch &7| "
 
 # Enable or Disable the sending of the NotifyMsg. This can have false positives at times, and is only called on successful attempts (Which is not often).
-SendNotification: true
+# Sends a notification (%player_name% is replaced with the Player's Name) to players with the permission specified below, defaults to "dupePatch.notify" (Case-Sensitive).
+Notification:
+  Enabled: true
+  Message: "&c&l%player_name%, was caught trying to Drop Glitch!"
+  Permission: "dupePatch.notify"
