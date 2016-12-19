@@ -18,16 +18,13 @@ import static org.bukkit.Bukkit.getOnlinePlayers;
 
 public class DupePatch extends JavaPlugin implements Listener {
 
-    private static final String BASE_PATH = "Notification.";
     private static DupePatch instance;
+    private static final String BASE_PATH = "Notification.";
 
 
     private boolean notifyEnabled;
-
-    private String notifyPrefix;
-    private String notifyMsg;
-    private String notifyPerm;
-
+    private String notifyPrefix, notifyMsg, notifyPerm;
+    
 
     @Override
     public void onEnable() {
@@ -111,5 +108,4 @@ public class DupePatch extends JavaPlugin implements Listener {
     private static Stream<? extends CommandSender> receivers() {
         return concat(getOnlinePlayers().stream().filter(player -> player.hasPermission(getInstance().getNotifyPerm())), of(Bukkit.getConsoleSender()));
     }
-
 }
