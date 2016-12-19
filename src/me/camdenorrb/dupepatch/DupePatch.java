@@ -12,8 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
+import static java.util.stream.Stream.concat;
 import static org.bukkit.Bukkit.getOnlinePlayers;
 
 public class DupePatch extends JavaPlugin implements Listener {
